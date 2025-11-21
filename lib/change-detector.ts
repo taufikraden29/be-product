@@ -199,7 +199,7 @@ class ChangeDetector {
 
     // Detailed changes (limit to first 10 to avoid message too long)
     const importantChanges = changeLog.changes
-      .filter(c => c.changeType !== 'same')
+      .filter(c => c.changeType === 'price' || c.changeType === 'status' || c.changeType === 'both' || c.changeType === 'new')
       .slice(0, 10)
 
     if (importantChanges.length > 0) {

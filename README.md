@@ -1,31 +1,41 @@
-# Himalaya Scraper API
+# Himalaya Scraper Next.js
 
-Backend API untuk scraping data produk dari Himalaya Reload dengan auto-update setiap menit dan notifikasi Telegram untuk perubahan data.
+Full-stack Next.js aplikasi untuk scraping data produk dari Himalaya Reload dengan **auto-scraping realtime setiap 1 menit** dan frontend yang auto-refresh.
 
-## 🚀 Fitur
+## 🚀 Fitur Utama
 
-- **Auto Scraping**: Mengambil data dari source setiap menit
-- **Change Detection**: Mendeteksi perubahan harga dan status produk
-- **Telegram Notifications**: Mengirim notifikasi ketika ada perubahan data
-- **RESTful API**: Menyediakan endpoint untuk mengakses data
-- **Caching**: Menyimpan data di memory untuk performa lebih baik
-- **Error Handling**: Menangani error dengan logging yang baik
-- **Health Check**: Endpoint untuk monitoring status aplikasi
+### Backend:
+- ✅ **Auto Scraping Realtime**: Data di-scrape otomatis setiap 1 menit via cron
+- ✅ **Smart Caching**: MD5 hash comparison, hanya update jika ada perubahan
+- ✅ **Telegram Notifications**: Notifikasi perubahan harga/status
+- ✅ **RESTful API**: Multiple endpoints untuk data access
+- ✅ **Change Detection**: Deteksi dan log semua perubahan
+- ✅ **Error Handling**: Robust error handling dengan fallback
+
+### Frontend:
+- ✅ **Auto-Refresh**: Frontend auto-refresh setiap 60 detik
+- ✅ **Real-time Updates**: Data selalu sinkron dengan backend
+- ✅ **Visual Indicators**: Status widget dengan countdown timer
+- ✅ **Manual Controls**: Pause/Resume dan Force Refresh
+- ✅ **Data Analysis**: Built-in analysis dashboard
+- ✅ **Responsive UI**: Modern, clean interface with Tailwind CSS
 
 ## 📋 API Endpoints
 
 ### Produk
 - `GET /api/products` - Mendapatkan semua produk
-- `GET /api/products/category/:category` - Mendapatkan produk per kategori
-- `GET /api/products/search?q=query&category=cat` - Mencari produk
-- `GET /api/products/available` - Mendapatkan produk yang tersedia saja
+- `GET /api/live-scraper` - Live scrape data dari source
+- `GET /api/analysis` - Analisis data komprehensif
+- `GET /data.json` - Data JSON statis (auto-updated)
+
+### Auto-Scraping (Cron)
+- `POST /api/scrape-cron` - Trigger auto-scraping (untuk cron jobs)
+- `GET /api/scrape-cron` - Info endpoint dan setup instructions
 
 ### Utility
-- `GET /api/categories` - Mendapatkan semua kategori
-- `POST /api/refresh` - Manual refresh data
-- `POST /api/test-telegram` - Test notifikasi Telegram
-- `GET /api/status` - Status scraper dan scheduler
-- `GET /health` - Health check
+- `POST /api/telegram-test` - Test notifikasi Telegram
+- `GET /api/status` - Status scraper
+- `POST /api/changes` - Detect changes manually
 
 ### Response Format
 ```json
@@ -41,15 +51,52 @@ Backend API untuk scraping data produk dari Himalaya Reload dengan auto-update s
 
 ## 🛠️ Teknologi
 
-- **Node.js** - Runtime JavaScript
-- **Express.js** - Web Framework
-- **Cheerio** - HTML Parsing
-- **Axios** - HTTP Client
-- **node-cron** - Task Scheduler
-- **Winston** - Logging
-- **node-telegram-bot-api** - Telegram Integration
+### Backend:
+- **Next.js 15** - Full-stack React Framework with App Router
+- **TypeScript** - Type-safe development
+- **Cheerio** - Fast HTML parsing
+- **Axios** - HTTP client untuk scraping
 
-## 📦 Deployment ke Railway
+### Frontend:
+- **React 19** - Latest React version
+- **Tailwind CSS** - Utility-first CSS
+- **Custom Hooks** - useAutoRefresh untuk realtime updates
+
+### Deployment:
+- **Vercel** - Recommended (dengan Vercel Cron)
+- **Railway** - Alternative (dengan Railway Cron)
+- **External Cron** - cron-job.org atau similar
+
+## 🚀 Quick Start
+
+### Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Setup environment variables
+cp .env.example .env
+# Edit .env dengan konfigurasi Anda
+
+# Run development server
+npm run dev
+
+# Open browser
+# http://localhost:3000
+```
+
+### Test Auto-Scraping (Local)
+
+```bash
+# Test scrape endpoint
+curl -X POST http://localhost:3000/api/scrape-cron
+
+# Check hasil
+curl http://localhost:3000/data.json | grep lastUpdate
+```
+
+## 📦 Deployment
 
 ### 1. Persiapan
 
@@ -86,27 +133,47 @@ railway login
 railway up
 ```
 
-### 3. Environment Variables di Railway
+### 3. Environment Variables
 
-Set variabel berikut di Railway dashboard:
+Set variabel berikut di dashboard platform Anda:
 
 **Wajib:**
 - `NODE_ENV` = `production`
-- `SCRAPER_URL` = `https://himalayareload.otoreport.com/harga.js.php?id=b61804374cb7e3d207028ac05b492f82265047801111a2c0bc3bb288a7a843341b24cdc21347fbc9ba602392b435df468647-6`
-- `UPDATE_INTERVAL` = `* * * * *`
-- `LOG_LEVEL` = `info`
+- `SCRAPER_URL` = URL sumber data Himalaya Reload
+- `CRON_SECRET` = Generate dengan: `openssl rand -base64 32`
 
 **Opsional (untuk Telegram):**
 - `TELEGRAM_BOT_TOKEN` = Token bot dari @BotFather
 - `TELEGRAM_CHAT_ID` = Chat ID tujuan notifikasi
 
-### 4. Cara Setup Bot Telegram
+### 4. Setup Auto-Scraping (PENTING!)
 
-1. Buat bot baru di [@BotFather](https://t.me/BotFather)
+**File sudah dikonfigurasi untuk auto-scraping:**
+- ✅ `vercel.json` - Vercel Cron (setiap 1 menit)
+- ✅ `railway.toml` - Railway Cron (setiap 1 menit)
+
+**Vercel:**
+Cron otomatis jalan setelah deploy. Verifikasi di Vercel Dashboard → Cron Jobs.
+
+**Railway:**
+Cron otomatis jalan dari `railway.toml` configuration.
+
+**External Cron (jika perlu):**
+Setup di cron-job.org:
+- URL: `https://your-domain.com/api/scrape-cron`
+- Method: `POST`
+- Schedule: `* * * * *`
+- Header: `Authorization: Bearer YOUR_CRON_SECRET`
+
+📖 **Dokumentasi lengkap**: Lihat `CRON-SETUP.md`
+
+### 5. Setup Bot Telegram (Opsional)
+
+1. Buat bot di [@BotFather](https://t.me/BotFather)
 2. Dapatkan token bot
-3. Mulai chat dengan bot baru
-4. Forward pesan dari bot ke [@userinfobot](https://t.me/userinfobot) untuk dapatkan Chat ID
-5. Set `TELEGRAM_BOT_TOKEN` dan `TELEGRAM_CHAT_ID` di Railway
+3. Get Chat ID dari [@userinfobot](https://t.me/userinfobot)
+4. Set `TELEGRAM_BOT_TOKEN` dan `TELEGRAM_CHAT_ID`
+5. Test di frontend: Menu "Settings" → Send Test Message
 
 ## 📊 Format Data Produk
 

@@ -9,56 +9,11 @@ const logger = {
     warn: (message) => console.warn(`[WARN] ${message}`)
 };
 
-// Telegram service (simplified for serverless)
-const telegramService = {
-    async notifyDataChanges(changes) {
-        try {
-            if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
-                logger.warn('Telegram credentials not configured');
-                return { success: false, message: 'Telegram not configured' };
-            }
+// Telegram service (using secure Telegraf library)
+const telegramService = require('../utils/telegram');
 
-            const telegramBotApi = require('node-telegram-bot-api');
-            const bot = new telegramBotApi(process.env.TELEGRAM_BOT_TOKEN);
-
-            const changeMessages = changes.slice(0, 10).map(change => {
-                const message = `🔄 ${change.code} - ${change.category}\n💰 Rp ${change.price.toLocaleString()}\n📊 ${change.status.text}`;
-                if (change.priceChange) {
-                    const arrow = change.priceChange.type === 'increase' ? '📈' : '📉';
-                    return `${message}\n${arrow} ${change.priceChange.old} → ${change.priceChange.new}`;
-                }
-                return message;
-            }).join('\n\n');
-
-            const fullMessage = `🛍️ *Himalaya Reload Update*\n\n${changeMessages}\n\n📅 ${new Date().toLocaleString('id-ID')}`;
-
-            await bot.sendMessage(process.env.TELEGRAM_CHAT_ID, fullMessage, { parse_mode: 'Markdown' });
-            return { success: true, message: 'Notification sent' };
-        } catch (error) {
-            logger.error('Failed to send Telegram notification:', error);
-            return { success: false, message: error.message };
-        }
-    },
-
-    async testConnection() {
-        try {
-            if (!process.env.TELEGRAM_BOT_TOKEN || !process.env.TELEGRAM_CHAT_ID) {
-                return { success: false, message: 'Telegram credentials not configured' };
-            }
-
-            const telegramBotApi = require('node-telegram-bot-api');
-            const bot = new telegramBotApi(process.env.TELEGRAM_BOT_TOKEN);
-
-            await bot.getMe();
-            await bot.sendMessage(process.env.TELEGRAM_CHAT_ID, '✅ Telegram notification test successful!');
-
-            return { success: true, message: 'Telegram connection successful' };
-        } catch (error) {
-            logger.error('Telegram test failed:', error);
-            return { success: false, message: error.message };
-        }
-    }
-};
+// Change tracking system
+const { changeLogger, changeTracker } = require('../utils/changeLogger');
 
 class ScraperService {
     constructor() {
@@ -105,11 +60,9 @@ class ScraperService {
             // Parse and extract data
             const parsedData = this.parseHtml(html);
 
-            // Detect changes if we have previous data
-            let changes = [];
-            if (this.cache.data) {
-                changes = this.detectChanges(this.cache.data, parsedData);
-            }
+            // Detect changes using the advanced change tracker
+            const changeResult = changeTracker.detectAndLogChanges(parsedData, this.cache.data);
+            const changes = changeResult.changes;
 
             // Update cache
             this.cache = {
