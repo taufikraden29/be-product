@@ -1,42 +1,37 @@
 {
-  "name": "himalaya-scraper-api",
-  "version": "1.0.0",
-  "description": "Backend API for scraping Himalaya Reload data with automatic updates",
-  "main": "src/app.js",
+  "name": "himalaya-scraper-next",
+  "version": "2.0.0",
+  "description": "Next.js aplikasi untuk scraping data harga produk Himalaya Reload dengan frontend integration",
+  "private": true,
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "nodemon src/app.js",
-    "vercel": "vercel",
-    "vercel-prod": "vercel --prod",
-    "build": "echo 'No build step required for serverless'",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "scraper": "node src/services/scraper.js"
   },
-  "keywords": [
-    "scraper",
-    "api",
-    "himalaya",
-    "reload",
-    "express"
-  ],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
+    "autoprefixer": "^10.4.22",
     "axios": "^1.6.0",
     "cheerio": "^1.1.2",
-    "compression": "^1.8.1",
-    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "express": "^4.18.2",
-    "helmet": "^8.1.0",
-    "morgan": "^1.10.1",
+    "next": "^15.1.6",
     "node-cron": "^4.2.1",
     "node-telegram-bot-api": "^0.66.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "winston": "^3.18.3"
   },
   "devDependencies": {
-    "eslint": "^9.39.1",
-    "nodemon": "^3.1.11",
-    "prettier": "^3.6.2"
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.6",
+    "postcss": "^8",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   },
   "engines": {
     "node": ">=18.0.0"
