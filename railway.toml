@@ -1,6 +1,9 @@
 [build]
 builder = "NIXPACKS"
 
+[build.env]
+NPM_CONFIG_PRODUCTION = "false"
+
 [deploy]
 healthcheckPath = "/health"
 healthcheckTimeout = 10000
