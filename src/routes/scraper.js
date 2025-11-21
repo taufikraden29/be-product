@@ -6,11 +6,12 @@ const { logger } = require('../utils/logger');
 
 /**
  * @route   GET /api/products
- * @desc    Get all cached products
+ * @desc    Get all cached products with pagination
  * @access  Public
  */
 router.get('/products', (req, res) => {
     try {
+        const { page = 1, limit = 100 } = req.query;
         const cachedData = scraperService.getCachedData();
 
         if (!cachedData) {
@@ -20,9 +21,30 @@ router.get('/products', (req, res) => {
             });
         }
 
+        // Pagination
+        const pageNum = parseInt(page);
+        const limitNum = parseInt(limit);
+        const startIndex = (pageNum - 1) * limitNum;
+        const endIndex = startIndex + limitNum;
+
+        const paginatedProducts = cachedData.data.slice(startIndex, endIndex);
+
+        // Pagination metadata
+        const totalPages = Math.ceil(cachedData.data.length / limitNum);
+        const hasNextPage = pageNum < totalPages;
+        const hasPrevPage = pageNum > 1;
+
         res.json({
             success: true,
-            data: cachedData.data,
+            data: paginatedProducts,
+            pagination: {
+                currentPage: pageNum,
+                totalPages: totalPages,
+                totalItems: cachedData.data.length,
+                itemsPerPage: limitNum,
+                hasNextPage: hasNextPage,
+                hasPrevPage: hasPrevPage
+            },
             metadata: {
                 lastUpdate: cachedData.lastUpdate,
                 lastFetch: cachedData.lastFetch,
@@ -79,12 +101,12 @@ router.get('/products/category/:category', (req, res) => {
 
 /**
  * @route   GET /api/products/search
- * @desc    Search products by code or description
+ * @desc    Search products by code or description with pagination
  * @access  Public
  */
 router.get('/products/search', (req, res) => {
     try {
-        const { q, category } = req.query;
+        const { q, category, page = 1, limit = 50 } = req.query;
         const cachedData = scraperService.getCachedData();
 
         if (!cachedData) {
@@ -112,9 +134,30 @@ router.get('/products/search', (req, res) => {
             );
         }
 
+        // Pagination
+        const pageNum = parseInt(page);
+        const limitNum = parseInt(limit);
+        const startIndex = (pageNum - 1) * limitNum;
+        const endIndex = startIndex + limitNum;
+
+        const paginatedProducts = filteredProducts.slice(startIndex, endIndex);
+
+        // Pagination metadata
+        const totalPages = Math.ceil(filteredProducts.length / limitNum);
+        const hasNextPage = pageNum < totalPages;
+        const hasPrevPage = pageNum > 1;
+
         res.json({
             success: true,
-            data: filteredProducts,
+            data: paginatedProducts,
+            pagination: {
+                currentPage: pageNum,
+                totalPages: totalPages,
+                totalItems: filteredProducts.length,
+                itemsPerPage: limitNum,
+                hasNextPage: hasNextPage,
+                hasPrevPage: hasPrevPage
+            },
             metadata: {
                 query: { q, category },
                 totalProducts: filteredProducts.length,

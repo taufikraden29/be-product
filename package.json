@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
+    "vercel": "vercel",
+    "vercel-prod": "vercel --prod",
+    "build": "echo 'No build step required for serverless'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
