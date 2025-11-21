@@ -4,8 +4,8 @@ const { logger } = require('../utils/logger');
 class TelegramService {
     constructor() {
         this.bot = null;
-        this.chatId = process.env.TELEGRAM_CHAT_ID || '7262989817';
-        this.botToken = process.env.TELEGRAM_BOT_TOKEN || '8513247780:AAFHZTyPTr6n4mSqP5UkbDJlbTDgAzs5S3o';
+        this.chatId = process.env.TELEGRAM_CHAT_ID;
+        this.botToken = process.env.TELEGRAM_BOT_TOKEN;
         this.enabled = !!(this.botToken && this.chatId);
 
         if (this.enabled) {
