@@ -227,7 +227,8 @@ router.post('/refresh', async (req, res) => {
                 updated: result.updated,
                 lastUpdate: result.lastUpdate,
                 lastFetch: result.lastFetch,
-                totalProducts: result.data.length
+                totalProducts: result.data.length,
+                changes: result.changes || []
             }
         });
     } catch (error) {
@@ -262,6 +263,31 @@ router.get('/status', (req, res) => {
         res.status(500).json({
             error: 'Internal Server Error',
             message: 'Failed to fetch status'
+        });
+    }
+});
+
+/**
+ * @route   POST /api/test-telegram
+ * @desc    Test Telegram notification
+ * @access  Public
+ */
+router.post('/test-telegram', async (req, res) => {
+    try {
+        const result = await scraperService.testTelegramNotification();
+
+        res.json({
+            success: result.success,
+            message: result.message,
+            metadata: {
+                timestamp: new Date().toISOString()
+            }
+        });
+    } catch (error) {
+        logger.error('Error testing Telegram notification:', error);
+        res.status(500).json({
+            error: 'Internal Server Error',
+            message: 'Failed to test Telegram notification'
         });
     }
 });

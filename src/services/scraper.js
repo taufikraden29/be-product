@@ -2,6 +2,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const crypto = require('crypto');
 const { logger } = require('../utils/logger');
+const telegramService = require('./telegram');
 
 class ScraperService {
     constructor() {
@@ -43,6 +44,12 @@ class ScraperService {
             // Parse and extract data
             const parsedData = this.parseHtml(html);
 
+            // Detect changes if we have previous data
+            let changes = [];
+            if (this.cache.data) {
+                changes = this.detectChanges(this.cache.data, parsedData);
+            }
+
             // Update cache
             this.cache = {
                 data: parsedData,
@@ -53,11 +60,18 @@ class ScraperService {
 
             logger.info(`Data updated successfully. Found ${parsedData.length} product categories`);
 
+            // Send Telegram notifications for changes
+            if (changes.length > 0) {
+                logger.info(`Detected ${changes.length} changes, sending Telegram notification`);
+                await telegramService.notifyDataChanges(changes);
+            }
+
             return {
                 data: parsedData,
                 updated: true,
                 lastUpdate: this.cache.lastUpdate,
-                lastFetch: this.cache.lastFetch
+                lastFetch: this.cache.lastFetch,
+                changes: changes
             };
 
         } catch (error) {
@@ -77,6 +91,64 @@ class ScraperService {
 
             throw new Error(`Failed to fetch data: ${error.message}`);
         }
+    }
+
+    detectChanges(oldData, newData) {
+        const changes = [];
+        const oldProductsMap = this.createProductMap(oldData);
+        const newProductsMap = this.createProductMap(newData);
+
+        // Check for modified products
+        for (const [key, newProduct] of Object.entries(newProductsMap)) {
+            const oldProduct = oldProductsMap[key];
+
+            if (oldProduct) {
+                // Product exists, check for changes
+                const change = {
+                    code: newProduct.code,
+                    category: newProduct.category,
+                    price: newProduct.price,
+                    status: newProduct.status
+                };
+
+                let hasChange = false;
+
+                // Check price change
+                if (oldProduct.price !== newProduct.price) {
+                    change.priceChange = {
+                        old: oldProduct.price,
+                        new: newProduct.price,
+                        difference: newProduct.price - oldProduct.price,
+                        type: newProduct.price > oldProduct.price ? 'increase' : 'decrease'
+                    };
+                    hasChange = true;
+                }
+
+                // Check status change
+                if (oldProduct.status.text !== newProduct.status.text || oldProduct.status.available !== newProduct.status.available) {
+                    change.statusChange = {
+                        old: oldProduct.status,
+                        new: newProduct.status
+                    };
+                    hasChange = true;
+                }
+
+                if (hasChange) {
+                    changes.push(change);
+                }
+            }
+        }
+
+        return changes;
+    }
+
+    createProductMap(data) {
+        const map = {};
+        data.forEach(product => {
+            const key = `${product.category}-${product.code}`;
+            map[key] = product;
+        });
+        return map;
     }
 
     parseHtml(html) {
@@ -155,6 +227,10 @@ class ScraperService {
             lastFetch: this.cache.lastFetch,
             dataCount: this.cache.data ? this.cache.data.length : 0
         };
+    }
+
+    async testTelegramNotification() {
+        return await telegramService.testConnection();
     }
 }
 
