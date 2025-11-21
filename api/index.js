@@ -7,15 +7,6 @@ const logger = {
 // Initialize environment variables
 require('dotenv').config();
 
-// Import routes
-let scraperRoutes;
-try {
-    scraperRoutes = require('../src/routes/scraper');
-} catch (error) {
-    logger.error('Failed to load scraper routes:', error);
-    scraperRoutes = null;
-}
-
 module.exports = async (req, res) => {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -40,28 +31,40 @@ module.exports = async (req, res) => {
             });
         }
 
+        // Import scraper service dynamically for each request
+        let scraperService;
+        try {
+            scraperService = require('./scraper');
+        } catch (error) {
+            logger.error('Failed to load scraper service:', error);
+            return res.status(500).json({
+                error: 'Service Unavailable',
+                message: 'Scraper service is not available'
+            });
+        }
+
         // API routes
-        if (url.startsWith('/api') && scraperRoutes) {
+        if (url.startsWith('/api')) {
             // Create a simple Express-like router
             const path = url.replace('/api', '');
 
             // Handle different API endpoints
             if (path === '/products' && method === 'GET') {
-                return handleGetProducts(req, res);
+                return await handleGetProducts(req, res, scraperService);
             } else if (path === '/products/search' && method === 'GET') {
-                return handleSearchProducts(req, res);
+                return await handleSearchProducts(req, res, scraperService);
             } else if (path.startsWith('/products/category/') && method === 'GET') {
-                return handleGetProductsByCategory(req, res);
+                return await handleGetProductsByCategory(req, res, scraperService);
             } else if (path === '/products/available' && method === 'GET') {
-                return handleGetAvailableProducts(req, res);
+                return await handleGetAvailableProducts(req, res, scraperService);
             } else if (path === '/categories' && method === 'GET') {
-                return handleGetCategories(req, res);
+                return await handleGetCategories(req, res, scraperService);
             } else if (path === '/status' && method === 'GET') {
-                return handleGetStatus(req, res);
+                return await handleGetStatus(req, res, scraperService);
             } else if (path === '/refresh' && method === 'POST') {
-                return handleRefresh(req, res);
+                return await handleRefresh(req, res, scraperService);
             } else if (path === '/test-telegram' && method === 'POST') {
-                return handleTestTelegram(req, res);
+                return await handleTestTelegram(req, res, scraperService);
             }
         }
 
@@ -81,9 +84,8 @@ module.exports = async (req, res) => {
 };
 
 // Handler functions
-async function handleGetProducts(req, res) {
+async function handleGetProducts(req, res, scraperService) {
     try {
-        const scraperService = require('../src/services/scraper');
         const cachedData = scraperService.getCachedData();
 
         if (!cachedData) {
@@ -130,9 +132,8 @@ async function handleGetProducts(req, res) {
     }
 }
 
-async function handleSearchProducts(req, res) {
+async function handleSearchProducts(req, res, scraperService) {
     try {
-        const scraperService = require('../src/services/scraper');
         const cachedData = scraperService.getCachedData();
 
         if (!cachedData) {
@@ -199,9 +200,8 @@ async function handleSearchProducts(req, res) {
     }
 }
 
-async function handleGetProductsByCategory(req, res) {
+async function handleGetProductsByCategory(req, res, scraperService) {
     try {
-        const scraperService = require('../src/services/scraper');
         const cachedData = scraperService.getCachedData();
 
         if (!cachedData) {
@@ -237,9 +237,8 @@ async function handleGetProductsByCategory(req, res) {
     }
 }
 
-async function handleGetAvailableProducts(req, res) {
+async function handleGetAvailableProducts(req, res, scraperService) {
     try {
-        const scraperService = require('../src/services/scraper');
         const cachedData = scraperService.getCachedData();
 
         if (!cachedData) {
@@ -271,9 +270,8 @@ async function handleGetAvailableProducts(req, res) {
     }
 }
 
-async function handleGetCategories(req, res) {
+async function handleGetCategories(req, res, scraperService) {
     try {
-        const scraperService = require('../src/services/scraper');
         const cachedData = scraperService.getCachedData();
 
         if (!cachedData) {
@@ -302,10 +300,8 @@ async function handleGetCategories(req, res) {
     }
 }
 
-async function handleGetStatus(req, res) {
+async function handleGetStatus(req, res, scraperService) {
     try {
-        const scraperService = require('../src/services/scraper');
-
         try {
             const { getStatus } = require('../src/services/scheduler');
             const status = getStatus();
@@ -339,10 +335,8 @@ async function handleGetStatus(req, res) {
     }
 }
 
-async function handleRefresh(req, res) {
+async function handleRefresh(req, res, scraperService) {
     try {
-        const scraperService = require('../src/services/scraper');
-
         try {
             const result = await scraperService.fetchData();
             return res.json({
@@ -372,9 +366,8 @@ async function handleRefresh(req, res) {
     }
 }
 
-async function handleTestTelegram(req, res) {
+async function handleTestTelegram(req, res, scraperService) {
     try {
-        const scraperService = require('../src/services/scraper');
         const result = await scraperService.testTelegramNotification();
 
         return res.json({
