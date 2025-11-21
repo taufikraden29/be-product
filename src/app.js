@@ -29,6 +29,15 @@ app.get('/health', (req, res) => {
     });
 });
 
+// Additional health endpoint for Railway compatibility
+app.get('/up', (req, res) => {
+    res.status(200).json({
+        status: 'OK',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
+
 // API Routes
 app.use('/api', scraperRoutes);
 
@@ -49,7 +58,7 @@ app.use((err, req, res, next) => {
     });
 });
 
-// Start the scheduler for auto-updating data
+// Start of scheduler for auto-updating data
 startScheduler();
 
 // Start server

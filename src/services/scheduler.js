@@ -6,13 +6,20 @@ class SchedulerService {
     constructor() {
         this.isRunning = false;
         this.task = null;
-        this.updateInterval = process.env.UPDATE_INTERVAL || '* * * * *'; // Every minute by default
+        // Use a simpler cron pattern to avoid parsing issues
+        this.updateInterval = '* * * * *'; // Every minute by default
     }
 
     startScheduler() {
         if (this.isRunning) {
             logger.warn('Scheduler is already running');
             return;
+        }
+
+        // Override interval from environment if valid
+        const envInterval = process.env.UPDATE_INTERVAL;
+        if (envInterval && this.isValidCronPattern(envInterval)) {
+            this.updateInterval = envInterval;
         }
 
         logger.info(`Starting scheduler with interval: ${this.updateInterval}`);
@@ -31,6 +38,21 @@ class SchedulerService {
         this.isRunning = true;
 
         logger.info('Scheduler started successfully');
+    }
+
+    isValidCronPattern(pattern) {
+        // Basic validation - should be 5 parts separated by spaces
+        if (!pattern || typeof pattern !== 'string') {
+            return false;
+        }
+
+        const parts = pattern.trim().split(/\s+/);
+        if (parts.length !== 5) {
+            return false;
+        }
+
+        // Very basic validation - just check each part is not empty
+        return parts.every(part => part.length > 0);
     }
 
     stopScheduler() {
