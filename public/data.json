@@ -1,0 +1,427 @@
+{
+    "success": true,
+    "message": "Himalaya Reload Products Data",
+    "metadata": {
+        "lastUpdate": "2025-11-21T03:33:00.343Z",
+        "lastFetch": "2025-11-21T03:33:00.343Z",
+        "totalProducts": 2418,
+        "categories": [
+            "TELKOMSEL",
+            "INDOSAT OOREDOO",
+            "XL",
+            "AXIS",
+            "SMARTFREN",
+            "THREE",
+            "BOLT",
+            "PLN PREPAID",
+            "PLN POSTPAID",
+            "PDAM",
+            "BPJS KES",
+            "GAME VOUCHER",
+            "TV KABEL",
+            "VOUCHER INTERNET",
+            "EMONEY",
+            "TICKET PESAWAT",
+            "KERETA API",
+            "HOTEL",
+            "ASURANSI"
+        ]
+    },
+    "products": [{
+            "category": "TELKOMSEL",
+            "code": "S5",
+            "description": "Telkomsel 5.000",
+            "price": 5800,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "TELKOMSEL",
+            "code": "S10",
+            "description": "Telkomsel 10.000",
+            "price": 10800,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "TELKOMSEL",
+            "code": "S20",
+            "description": "Telkomsel 20.000",
+            "price": 20800,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "TELKOMSEL",
+            "code": "S25",
+            "description": "Telkomsel 25.000",
+            "price": 25800,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "TELKOMSEL",
+            "code": "S50",
+            "description": "Telkomsel 50.000",
+            "price": 50800,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "INDOSAT OOREDOO",
+            "code": "I5",
+            "description": "Indosat 5.000",
+            "price": 5600,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "INDOSAT OOREDOO",
+            "code": "I10",
+            "description": "Indosat 10.000",
+            "price": 10600,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "INDOSAT OOREDOO",
+            "code": "I20",
+            "description": "Indosat 20.000",
+            "price": 20600,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "INDOSAT OOREDOO",
+            "code": "I25",
+            "description": "Indosat 25.000",
+            "price": 25600,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "INDOSAT OOREDOO",
+            "code": "I50",
+            "description": "Indosat 50.000",
+            "price": 50600,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "XL",
+            "code": "X5",
+            "description": "XL 5.000",
+            "price": 5700,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "XL",
+            "code": "X10",
+            "description": "XL 10.000",
+            "price": 10700,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "XL",
+            "code": "X20",
+            "description": "XL 20.000",
+            "price": 20700,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "XL",
+            "code": "X25",
+            "description": "XL 25.000",
+            "price": 25700,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "XL",
+            "code": "X50",
+            "description": "XL 50.000",
+            "price": 50700,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "AXIS",
+            "code": "A5",
+            "description": "Axis 5.000",
+            "price": 5600,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "AXIS",
+            "code": "A10",
+            "description": "Axis 10.000",
+            "price": 10600,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "AXIS",
+            "code": "A20",
+            "description": "Axis 20.000",
+            "price": 20600,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "AXIS",
+            "code": "A25",
+            "description": "Axis 25.000",
+            "price": 25600,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "AXIS",
+            "code": "A50",
+            "description": "Axis 50.000",
+            "price": 50600,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "SMARTFREN",
+            "code": "SF5",
+            "description": "Smartfren 5.000",
+            "price": 5500,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "SMARTFREN",
+            "code": "SF10",
+            "description": "Smartfren 10.000",
+            "price": 10500,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "SMARTFREN",
+            "code": "SF20",
+            "description": "Smartfren 20.000",
+            "price": 20500,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "SMARTFREN",
+            "code": "SF25",
+            "description": "Smartfren 25.000",
+            "price": 25500,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "SMARTFREN",
+            "code": "SF50",
+            "description": "Smartfren 50.000",
+            "price": 50500,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "THREE",
+            "code": "T5",
+            "description": "Three 5.000",
+            "price": 5400,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "THREE",
+            "code": "T10",
+            "description": "Three 10.000",
+            "price": 10400,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "THREE",
+            "code": "T20",
+            "description": "Three 20.000",
+            "price": 20400,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "THREE",
+            "code": "T25",
+            "description": "Three 25.000",
+            "price": 25400,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "THREE",
+            "code": "T50",
+            "description": "Three 50.000",
+            "price": 50400,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "PLN PREPAID",
+            "code": "PLN20",
+            "description": "PLN Prepaid 20.000",
+            "price": 20300,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "PLN PREPAID",
+            "code": "PLN50",
+            "description": "PLN Prepaid 50.000",
+            "price": 50300,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "PLN PREPAID",
+            "code": "PLN100",
+            "description": "PLN Prepaid 100.000",
+            "price": 100300,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "PLN PREPAID",
+            "code": "PLN200",
+            "description": "PLN Prepaid 200.000",
+            "price": 200300,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "PLN PREPAID",
+            "code": "PLN500",
+            "description": "PLN Prepaid 500.000",
+            "price": 500300,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        },
+        {
+            "category": "PLN PREPAID",
+            "code": "PLN1000",
+            "description": "PLN Prepaid 1.000.000",
+            "price": 1000300,
+            "status": {
+                "text": "open",
+                "available": true,
+                "status": "open"
+            }
+        }
+    ]
+}
